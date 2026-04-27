@@ -333,3 +333,8 @@ Example:
 `execution_run_check` only runs checks from the repo profile. That is an
 intentional constraint: validation commands should be named, reviewable, and
 recorded instead of arbitrary shell snippets.
+
+## Roadmap
+
+See [docs/roadmap.md](docs/roadmap.md). Lightweight workspace boundary support is
+recorded there as a low-priority future item.
