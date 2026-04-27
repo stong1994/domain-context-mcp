@@ -187,6 +187,31 @@ Example client config:
 }
 ```
 
+## Claude Code
+
+Claude Code support is provided through:
+
+- `.mcp.json`: project-scoped MCP config that registers this server as
+  `repo-context`
+- `CLAUDE.md`: project instructions that tell Claude Code when to call the
+  workflow tools
+- `docs/claude-code.md`: setup, verification, and secret-handling notes
+
+After installing the project, open this repo with Claude Code and approve the
+project MCP server when prompted. Then verify status inside Claude Code:
+
+```text
+/mcp
+```
+
+Or configure it as a local, non-versioned Claude Code server:
+
+```bash
+claude mcp add --transport stdio --scope local \
+  --env AGENT_SUBSTRATE_HOME="$HOME/.agent-substrate-mcp" \
+  repo-context -- "$(pwd)/.venv/bin/agent-substrate-mcp"
+```
+
 ## Codex Trigger Skill
 
 This machine is configured with a thin Codex skill that nudges repo work into

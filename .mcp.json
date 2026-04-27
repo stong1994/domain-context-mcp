@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "repo-context": {
+      "type": "stdio",
+      "command": "${REPO_CONTEXT_MCP_COMMAND:-/Users/stong/Project/Github/agent-substrate-mcp/.venv/bin/agent-substrate-mcp}",
+      "env": {
+        "AGENT_SUBSTRATE_HOME": "${AGENT_SUBSTRATE_HOME:-/Users/stong/.agent-substrate-mcp}"
+      }
+    }
+  }
+}

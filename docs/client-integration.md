@@ -49,6 +49,34 @@ Verified with:
 Codex reports `agent-substrate` as enabled over stdio. Existing conversations
 may need a new session or app restart before newly configured MCP tools appear.
 
+## Claude Code Status
+
+This repo includes Claude Code project files:
+
+```text
+.mcp.json
+CLAUDE.md
+docs/claude-code.md
+```
+
+`.mcp.json` registers this server as `repo-context`. `CLAUDE.md` provides the
+workflow trigger policy for Claude Code.
+
+Claude Code was not installed in this environment when this document was
+updated, so direct `claude mcp list` verification could not be run here. After
+installing Claude Code, verify with:
+
+```bash
+claude mcp list
+claude mcp get repo-context
+```
+
+Inside Claude Code, use:
+
+```text
+/mcp
+```
+
 ## Dogfood Command
 
 Temporary ledger:
