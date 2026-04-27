@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "agent-substrate": {
+      "command": "agent-substrate-mcp",
+      "env": {
+        "AGENT_SUBSTRATE_HOME": "/Users/stong/.agent-substrate-mcp"
+      }
+    }
+  }
+}
+

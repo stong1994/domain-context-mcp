@@ -1,0 +1,117 @@
+# Client Integration
+
+This project has been verified through a real MCP stdio client. The dogfood
+client starts the installed server command, initializes an MCP session, lists
+tools, and runs the full lifecycle.
+
+## Verified Server Command
+
+```text
+/Users/stong/Project/Github/agent-substrate-mcp/.venv/bin/agent-substrate-mcp
+```
+
+## Suggested MCP Config
+
+```json
+{
+  "mcpServers": {
+    "agent-substrate": {
+      "command": "/Users/stong/Project/Github/agent-substrate-mcp/.venv/bin/agent-substrate-mcp",
+      "env": {
+        "AGENT_SUBSTRATE_HOME": "/Users/stong/.agent-substrate-mcp"
+      }
+    }
+  }
+}
+```
+
+## Codex Status
+
+This machine has been configured in:
+
+```text
+/Users/stong/.codex/config.toml
+```
+
+The previous config was backed up to:
+
+```text
+/Users/stong/.codex/config.toml.agent-substrate.bak
+```
+
+Verified with:
+
+```bash
+/Applications/Codex.app/Contents/Resources/codex mcp list
+/Applications/Codex.app/Contents/Resources/codex mcp get agent-substrate
+```
+
+Codex reports `agent-substrate` as enabled over stdio. Existing conversations
+may need a new session or app restart before newly configured MCP tools appear.
+
+## Dogfood Command
+
+Temporary ledger:
+
+```bash
+.venv/bin/python scripts/dogfood_mcp.py
+```
+
+Persistent local ledger:
+
+```bash
+.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.agent-substrate-mcp
+```
+
+## Current Tools
+
+- `domain_context`
+- `domain_create`
+- `domain_duplicate_groups`
+- `domain_link_repo`
+- `domain_list`
+- `domain_merge`
+- `domain_read`
+- `domain_rename_directory`
+- `domain_resolve`
+- `execution_run_check`
+- `execution_suggest_checks`
+- `knowledge_decide`
+- `knowledge_decide_update`
+- `task_begin`
+- `task_complete`
+- `task_current`
+- `workspace_discover`
+- `workspace_context`
+- `knowledge_list`
+- `knowledge_propose_update`
+- `knowledge_read`
+- `knowledge_search`
+- `knowledge_propose`
+- `knowledge_update_list`
+- `knowledge_update_read`
+- `learning_review`
+- `task_list`
+- `task_resume`
+- `work_begin`
+- `work_checkpoint`
+- `work_finish`
+
+## Lifecycle Contract
+
+Preferred workflow contract:
+
+- Call `work_begin` before substantive repo work.
+- Call `work_checkpoint` when you have progress, checks, or learning candidates.
+- Call `learning_review` to accept/reject proposed learning.
+- Call `work_finish` before declaring the task done.
+
+Lower-level tools can still be used as lifecycle gates when a client needs
+manual control:
+
+- Call `task_begin` before substantive work.
+- Resolve domains with `domain_resolve` or pass a `domain_hint`.
+- Use `execution_run_check` for named validation checks.
+- Use `knowledge_propose_update` for durable domain learning candidates.
+- Use `knowledge_decide_update` before knowledge changes `SKILL.md`.
+- Call `task_complete` before declaring the task done.
