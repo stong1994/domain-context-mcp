@@ -3,4 +3,4 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def deterministic_domain_naming(monkeypatch):
-    monkeypatch.setenv("AGENT_SUBSTRATE_DOMAIN_NAMING", "deterministic")
+    monkeypatch.setenv("REPO_CONTEXT_DOMAIN_NAMING", "deterministic")

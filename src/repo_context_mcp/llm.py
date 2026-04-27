@@ -7,6 +7,19 @@ from typing import Any
 from .auth import resolve_openai_api_key
 
 
+def _env(name: str, legacy_name: str | None = None, default: str | None = None) -> str:
+    value = os.environ.get(name)
+    if value is not None:
+        return value
+    if legacy_name:
+        legacy_value = os.environ.get(legacy_name)
+        if legacy_value is not None:
+            return legacy_value
+    if default is None:
+        raise KeyError(name)
+    return default
+
+
 DOMAIN_RESOLVE_SCHEMA: dict[str, Any] = {
     "type": "object",
     "additionalProperties": False,
@@ -78,13 +91,13 @@ def resolve_domain_with_openai(
     api_key = resolve_openai_api_key()
     if not api_key:
         raise RuntimeError(
-            "OpenAI API key is not configured. Set AGENT_SUBSTRATE_OPENAI_API_KEY, "
-            "OPENAI_API_KEY, or run agent-substrate-auth login --with-api-key."
+            "OpenAI API key is not configured. Set REPO_CONTEXT_OPENAI_API_KEY, "
+            "OPENAI_API_KEY, or run repo-context-auth login --with-api-key."
         )
 
     from openai import OpenAI
 
-    model = os.environ.get("AGENT_SUBSTRATE_MODEL", "gpt-5.2-codex")
+    model = _env("REPO_CONTEXT_MODEL", "AGENT_SUBSTRATE_MODEL", "gpt-5.2-codex")
     client = OpenAI(api_key=api_key)
     payload = {
         "user_request": user_request,
@@ -112,7 +125,7 @@ def resolve_domain_with_openai(
                 "strict": True,
             }
         },
-        reasoning={"effort": os.environ.get("AGENT_SUBSTRATE_REASONING", "medium")},
+        reasoning={"effort": _env("REPO_CONTEXT_REASONING", "AGENT_SUBSTRATE_REASONING", "medium")},
     )
     parsed = json.loads(response.output_text)
     parsed["llm_used"] = True
@@ -128,13 +141,13 @@ def generate_domain_directory_name_with_openai(
     api_key = resolve_openai_api_key()
     if not api_key:
         raise RuntimeError(
-            "OpenAI API key is not configured. Set AGENT_SUBSTRATE_OPENAI_API_KEY, "
-            "OPENAI_API_KEY, or run agent-substrate-auth login --with-api-key."
+            "OpenAI API key is not configured. Set REPO_CONTEXT_OPENAI_API_KEY, "
+            "OPENAI_API_KEY, or run repo-context-auth login --with-api-key."
         )
 
     from openai import OpenAI
 
-    model = os.environ.get("AGENT_SUBSTRATE_MODEL", "gpt-5.2-codex")
+    model = _env("REPO_CONTEXT_MODEL", "AGENT_SUBSTRATE_MODEL", "gpt-5.2-codex")
     client = OpenAI(api_key=api_key)
     payload = {
         "name": name,
@@ -162,7 +175,7 @@ def generate_domain_directory_name_with_openai(
                 "strict": True,
             }
         },
-        reasoning={"effort": os.environ.get("AGENT_SUBSTRATE_REASONING", "medium")},
+        reasoning={"effort": _env("REPO_CONTEXT_REASONING", "AGENT_SUBSTRATE_REASONING", "medium")},
     )
     parsed = json.loads(response.output_text)
     return parsed["directory_name"]

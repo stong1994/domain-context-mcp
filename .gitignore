@@ -7,4 +7,6 @@ __pycache__/
 dist/
 build/
 .coverage
-
+.repo-context/*.json
+!.repo-context/profile.json
+.repo-context/domains/

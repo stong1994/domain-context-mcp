@@ -1,11 +1,11 @@
 import json
 
-from agent_substrate_mcp.workspace import read_profile, workspace_context
+from repo_context_mcp.workspace import read_profile, workspace_context
 
 
 def test_explicit_profile_is_used(tmp_path):
     repo = tmp_path / "repo"
-    profile_dir = repo / ".agent-substrate"
+    profile_dir = repo / ".repo-context"
     profile_dir.mkdir(parents=True)
     profile = {
         "name": "demo",
@@ -19,6 +19,24 @@ def test_explicit_profile_is_used(tmp_path):
 
     assert loaded["name"] == "demo"
     assert loaded["checks"][0]["id"] == "tests"
+    assert loaded["source"].endswith(".repo-context/profile.json")
+
+
+def test_legacy_profile_path_is_still_read(tmp_path):
+    repo = tmp_path / "repo"
+    profile_dir = repo / ".agent-substrate"
+    profile_dir.mkdir(parents=True)
+    profile = {
+        "name": "legacy-demo",
+        "languages": ["python"],
+        "checks": [],
+        "conventions": [],
+    }
+    (profile_dir / "profile.json").write_text(json.dumps(profile), encoding="utf-8")
+
+    loaded = read_profile(str(repo))
+
+    assert loaded["name"] == "legacy-demo"
     assert loaded["source"].endswith(".agent-substrate/profile.json")
 
 
@@ -31,4 +49,3 @@ def test_infers_python_profile(tmp_path):
 
     assert "python" in context["repo"]["languages"]
     assert context["checks"][0]["id"] == "pytest"
-

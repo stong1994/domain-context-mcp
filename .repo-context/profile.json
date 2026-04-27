@@ -1,5 +1,5 @@
 {
-  "name": "agent-substrate-mcp",
+  "name": "repo-context-mcp",
   "summary": "Local MCP substrate for repo context, execution ledgers, and reviewed knowledge updates.",
   "languages": ["python"],
   "checks": [

@@ -1,6 +1,6 @@
-# Agent Substrate MCP
+# Repo Context MCP
 
-Agent Substrate MCP is a local tool server for coding agents. It is deliberately
+Repo Context MCP is a local tool server for coding agents. It is deliberately
 not a CLI agent and does not try to orchestrate a conversation. Codex, Claude, or
 another MCP client remains the driver; this server provides the local operating
 layer:
@@ -78,20 +78,20 @@ It also exposes lower-level tools for precise control:
 By default, ledgers live in:
 
 ```text
-~/.agent-substrate-mcp/
+~/.repo-context-mcp/
 ```
 
 Override it with:
 
 ```text
-AGENT_SUBSTRATE_HOME=/path/to/state
+REPO_CONTEXT_HOME=/path/to/state
 ```
 
 Tasks, executions, and update ledgers are stored as small JSON collections.
 Domain knowledge is stored under:
 
 ```text
-~/.agent-substrate-mcp/domains/<readable-domain-name>/
+~/.repo-context-mcp/domains/<readable-domain-name>/
   SKILL.md
   domain.json
 ```
@@ -104,12 +104,13 @@ the machine index.
 
 ## Install
 
-Requires Python 3.10 or newer.
+See [docs/installation.md](docs/installation.md) for full Codex and Claude Code
+setup notes.
 
-From the project root:
+Quick local install:
 
 ```bash
-/opt/homebrew/opt/python@3.12/bin/python3.12 -m venv .venv
+python3 -m venv .venv
 .venv/bin/python -m pip install -e ".[dev]"
 ```
 
@@ -122,7 +123,7 @@ Run tests:
 Run the MCP server over stdio:
 
 ```bash
-.venv/bin/agent-substrate-mcp
+.venv/bin/repo-context-mcp
 ```
 
 ## OpenAI API
@@ -131,27 +132,27 @@ Run the MCP server over stdio:
 when an API key is configured. The key lookup order is:
 
 ```text
-AGENT_SUBSTRATE_OPENAI_API_KEY
+REPO_CONTEXT_OPENAI_API_KEY
 OPENAI_API_KEY
-~/.agent-substrate-mcp/auth.json
+~/.repo-context-mcp/auth.json
 ```
 
 Store a key once with:
 
 ```bash
-printenv OPENAI_API_KEY | .venv/bin/agent-substrate-auth login --with-api-key
+printenv OPENAI_API_KEY | .venv/bin/repo-context-auth login --with-api-key
 ```
 
 Check status without revealing the secret:
 
 ```bash
-.venv/bin/agent-substrate-auth status
+.venv/bin/repo-context-auth status
 ```
 
 Remove saved credentials:
 
 ```bash
-.venv/bin/agent-substrate-auth logout
+.venv/bin/repo-context-auth logout
 ```
 
 The saved auth file is written with `0600` permissions. The default model is:
@@ -163,8 +164,8 @@ gpt-5.2-codex
 Override it with:
 
 ```text
-AGENT_SUBSTRATE_MODEL=<model>
-AGENT_SUBSTRATE_REASONING=medium
+REPO_CONTEXT_MODEL=<model>
+REPO_CONTEXT_REASONING=medium
 ```
 
 If no API key is configured, domain resolution falls back to deterministic repo
@@ -177,10 +178,10 @@ Example client config:
 ```json
 {
   "mcpServers": {
-    "agent-substrate": {
-      "command": "/Users/stong/Project/Github/agent-substrate-mcp/.venv/bin/agent-substrate-mcp",
+    "repo-context": {
+      "command": "/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp",
       "env": {
-        "AGENT_SUBSTRATE_HOME": "/Users/stong/.agent-substrate-mcp"
+        "REPO_CONTEXT_HOME": "~/.repo-context-mcp"
       }
     }
   }
@@ -208,33 +209,33 @@ Or configure it as a local, non-versioned Claude Code server:
 
 ```bash
 claude mcp add --transport stdio --scope local \
-  --env AGENT_SUBSTRATE_HOME="$HOME/.agent-substrate-mcp" \
-  repo-context -- "$(pwd)/.venv/bin/agent-substrate-mcp"
+  --env REPO_CONTEXT_HOME="$HOME/.repo-context-mcp" \
+  repo-context -- "$(pwd)/.venv/bin/repo-context-mcp"
 ```
 
 ## Codex Trigger Skill
 
-This machine is configured with a thin Codex skill that nudges repo work into
-the Agent Substrate MCP workflow:
+Codex needs a thin trigger skill or project instruction that nudges repo work
+into the Repo Context MCP workflow:
 
 ```text
-/Users/stong/.codex/skills/agent-substrate-workflow/SKILL.md
+~/.codex/skills/repo-context-workflow/SKILL.md
 ```
 
 Its description is intentionally short to reduce skills context pressure:
 
 ```text
-Use when starting any repo/project/code task, including analysis, code changes, reviews, debugging, validation, tests, or project improvement; call Agent Substrate MCP work_begin first, work_checkpoint for checks/learnings, and work_finish before final response.
+Use when starting any repo/project/code task, including analysis, code changes, reviews, debugging, validation, tests, or project improvement; call Repo Context MCP work_begin first, work_checkpoint for checks/learnings, and work_finish before final response.
 ```
 
 Important: this README is documentation only. Codex does not read this project
 README at startup to decide which tools to use. Startup behavior comes from:
 
-- MCP server config in `/Users/stong/.codex/config.toml`
-- skill metadata in `/Users/stong/.codex/skills/agent-substrate-workflow/SKILL.md`
+- MCP server config in the Codex config file
+- skill metadata such as `~/.codex/skills/repo-context-workflow/SKILL.md`
 - any installed plugin skills, such as Superpowers
 
-The trigger skill is what tells Codex to prefer the Agent Substrate workflow.
+The trigger skill is what tells Codex to prefer the Repo Context workflow.
 The MCP config only makes the tools available.
 
 Expected behavior:
@@ -256,7 +257,7 @@ work_finish
 Or inspect the local ledger:
 
 ```bash
-ls -lt ~/.agent-substrate-mcp
+ls -lt ~/.repo-context-mcp
 ```
 
 ## Dogfood
@@ -271,7 +272,7 @@ By default, dogfood uses a temporary ledger directory. To write into the normal
 local ledger:
 
 ```bash
-.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.agent-substrate-mcp
+.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.repo-context-mcp
 ```
 
 The dogfood flow calls:
@@ -293,7 +294,7 @@ The server can infer basic repo profiles from files like `package.json`,
 For stronger control, add:
 
 ```text
-.agent-substrate/profile.json
+.repo-context/profile.json
 ```
 
 Example:

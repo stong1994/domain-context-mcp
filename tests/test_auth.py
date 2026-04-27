@@ -1,9 +1,9 @@
-from agent_substrate_mcp import auth
+from repo_context_mcp import auth
 
 
 def test_save_status_and_logout_api_key(tmp_path, monkeypatch):
-    monkeypatch.setenv("AGENT_SUBSTRATE_HOME", str(tmp_path / "state"))
-    monkeypatch.delenv("AGENT_SUBSTRATE_OPENAI_API_KEY", raising=False)
+    monkeypatch.setenv("REPO_CONTEXT_HOME", str(tmp_path / "state"))
+    monkeypatch.delenv("REPO_CONTEXT_OPENAI_API_KEY", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
 
     assert auth.status()["usable"] is False
@@ -19,17 +19,27 @@ def test_save_status_and_logout_api_key(tmp_path, monkeypatch):
 
 
 def test_env_key_takes_precedence(tmp_path, monkeypatch):
-    monkeypatch.setenv("AGENT_SUBSTRATE_HOME", str(tmp_path / "state"))
+    monkeypatch.setenv("REPO_CONTEXT_HOME", str(tmp_path / "state"))
     monkeypatch.setenv("OPENAI_API_KEY", "sk-env")
     auth.save_api_key("sk-saved")
 
     assert auth.resolve_openai_api_key() == "sk-env"
 
 
-def test_agent_substrate_env_key_takes_precedence(tmp_path, monkeypatch):
-    monkeypatch.setenv("AGENT_SUBSTRATE_HOME", str(tmp_path / "state"))
+def test_repo_context_env_key_takes_precedence(tmp_path, monkeypatch):
+    monkeypatch.setenv("REPO_CONTEXT_HOME", str(tmp_path / "state"))
     monkeypatch.setenv("OPENAI_API_KEY", "sk-env")
-    monkeypatch.setenv("AGENT_SUBSTRATE_OPENAI_API_KEY", "sk-agent")
+    monkeypatch.setenv("REPO_CONTEXT_OPENAI_API_KEY", "sk-agent")
     auth.save_api_key("sk-saved")
 
     assert auth.resolve_openai_api_key() == "sk-agent"
+
+
+def test_legacy_openai_env_key_still_works_during_migration(tmp_path, monkeypatch):
+    monkeypatch.setenv("REPO_CONTEXT_HOME", str(tmp_path / "state"))
+    monkeypatch.delenv("REPO_CONTEXT_OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setenv("AGENT_SUBSTRATE_OPENAI_API_KEY", "sk-legacy")
+
+    assert auth.resolve_openai_api_key() == "sk-legacy"
+    assert auth.status()["env_source"] == "AGENT_SUBSTRATE_OPENAI_API_KEY"

@@ -1,8 +1,8 @@
 import subprocess
 
-from agent_substrate_mcp.knowledge import decide_knowledge, propose_knowledge
-from agent_substrate_mcp.store import JsonStore
-from agent_substrate_mcp.tasks import begin_task, complete_task
+from repo_context_mcp.knowledge import decide_knowledge, propose_knowledge
+from repo_context_mcp.store import JsonStore
+from repo_context_mcp.tasks import begin_task, complete_task
 
 
 def test_task_complete_warns_without_execution(tmp_path):

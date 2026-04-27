@@ -17,10 +17,7 @@ It registers the server as `repo-context`:
   "mcpServers": {
     "repo-context": {
       "type": "stdio",
-      "command": "${REPO_CONTEXT_MCP_COMMAND:-/Users/stong/Project/Github/agent-substrate-mcp/.venv/bin/agent-substrate-mcp}",
-      "env": {
-        "AGENT_SUBSTRATE_HOME": "${AGENT_SUBSTRATE_HOME:-/Users/stong/.agent-substrate-mcp}"
-      }
+      "command": "${REPO_CONTEXT_MCP_COMMAND:-repo-context-mcp}"
     }
   }
 }
@@ -30,8 +27,8 @@ Claude Code supports environment expansion in `.mcp.json`, so users can override
 machine-specific paths without editing the file:
 
 ```bash
-export REPO_CONTEXT_MCP_COMMAND=/path/to/repo/.venv/bin/agent-substrate-mcp
-export AGENT_SUBSTRATE_HOME="$HOME/.agent-substrate-mcp"
+export REPO_CONTEXT_MCP_COMMAND=/path/to/repo/.venv/bin/repo-context-mcp
+export REPO_CONTEXT_HOME="$HOME/.repo-context-mcp"
 ```
 
 When Claude Code opens this project, it should prompt before trusting the
@@ -45,8 +42,8 @@ root after installing the package:
 
 ```bash
 claude mcp add --transport stdio --scope local \
-  --env AGENT_SUBSTRATE_HOME="$HOME/.agent-substrate-mcp" \
-  repo-context -- "$(pwd)/.venv/bin/agent-substrate-mcp"
+  --env REPO_CONTEXT_HOME="$HOME/.repo-context-mcp" \
+  repo-context -- "$(pwd)/.venv/bin/repo-context-mcp"
 ```
 
 Use these commands to verify:
@@ -80,13 +77,13 @@ Do not put OpenAI or Anthropic API keys into `.mcp.json`. Configure OpenAI acces
 through one of these local-only mechanisms:
 
 ```text
-AGENT_SUBSTRATE_OPENAI_API_KEY
+REPO_CONTEXT_OPENAI_API_KEY
 OPENAI_API_KEY
-~/.agent-substrate-mcp/auth.json
+~/.repo-context-mcp/auth.json
 ```
 
 The saved auth file can be created with:
 
 ```bash
-printenv OPENAI_API_KEY | .venv/bin/agent-substrate-auth login --with-api-key
+printenv OPENAI_API_KEY | .venv/bin/repo-context-auth login --with-api-key
 ```

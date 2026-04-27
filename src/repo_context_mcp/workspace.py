@@ -58,7 +58,10 @@ def git_status(repo_path: str | None = None) -> dict[str, Any]:
 
 def read_profile(repo_path: str | None = None) -> dict[str, Any]:
     repo = resolve_repo(repo_path)
-    explicit = repo / ".agent-substrate" / "profile.json"
+    explicit = repo / ".repo-context" / "profile.json"
+    legacy = repo / ".agent-substrate" / "profile.json"
+    if not explicit.exists() and legacy.exists():
+        explicit = legacy
     if explicit.exists():
         with explicit.open("r", encoding="utf-8") as handle:
             profile = json.load(handle)
@@ -105,7 +108,7 @@ def infer_profile(repo: Path) -> dict[str, Any]:
         checks.append({"id": "cargo-test", "label": "Rust tests", "command": ["cargo", "test"]})
 
     if not checks:
-        conventions.append("No validation checks inferred. Add .agent-substrate/profile.json to make checks explicit.")
+        conventions.append("No validation checks inferred. Add .repo-context/profile.json to make checks explicit.")
 
     return {
         "name": repo.name,
@@ -160,4 +163,3 @@ def _dedupe_checks(checks: list[dict[str, Any]]) -> list[dict[str, Any]]:
         seen.add(check["id"])
         result.append(check)
     return result
-

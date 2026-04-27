@@ -1,11 +1,10 @@
 {
   "mcpServers": {
-    "agent-substrate": {
-      "command": "agent-substrate-mcp",
+    "repo-context": {
+      "command": "repo-context-mcp",
       "env": {
-        "AGENT_SUBSTRATE_HOME": "/Users/stong/.agent-substrate-mcp"
+        "REPO_CONTEXT_HOME": "~/.repo-context-mcp"
       }
     }
   }
 }
-

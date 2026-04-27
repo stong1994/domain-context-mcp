@@ -1,11 +1,11 @@
-from agent_substrate_mcp.domains import create_domain, read_domain
-from agent_substrate_mcp.knowledge import (
+from repo_context_mcp.domains import create_domain, read_domain
+from repo_context_mcp.knowledge import (
     decide_knowledge_update,
     propose_knowledge_update,
     search_knowledge,
 )
-from agent_substrate_mcp.store import JsonStore
-from agent_substrate_mcp.tasks import begin_task, complete_task
+from repo_context_mcp.store import JsonStore
+from repo_context_mcp.tasks import begin_task, complete_task
 
 
 def test_accept_knowledge_update_writes_domain_skill(tmp_path, monkeypatch):

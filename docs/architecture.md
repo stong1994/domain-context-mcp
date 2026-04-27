@@ -1,6 +1,6 @@
 # Architecture
 
-Agent Substrate MCP is built around a boundary: the model decides what to do,
+Repo Context MCP is built around a boundary: the model decides what to do,
 and this server records the state that should survive the conversation.
 
 ## Responsibilities
@@ -84,10 +84,10 @@ deprecated when they become stale.
 
 ## Domain Resolution
 
-`domain_resolve` uses the OpenAI Responses API when `OPENAI_API_KEY` is
-configured. It sends the user request, repo profile, domain hint, and domain
-catalog, then expects structured JSON with matched domains, confidence, reasons,
-and optional new-domain suggestions.
+`domain_resolve` uses the OpenAI Responses API when `REPO_CONTEXT_OPENAI_API_KEY`,
+`OPENAI_API_KEY`, or saved local auth is configured. It sends the user request,
+repo profile, domain hint, and domain catalog, then expects structured JSON with
+matched domains, confidence, reasons, and optional new-domain suggestions.
 
 If the API is unavailable, the server falls back to repo and text matching while
 making that downgrade explicit with `llm_used: false`.

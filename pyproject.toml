@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "agent-substrate-mcp"
+name = "repo-context-mcp"
 version = "0.1.0"
 description = "A local MCP substrate for repo context, execution ledgers, and reviewed knowledge updates."
 readme = "README.md"
@@ -19,8 +19,8 @@ dev = [
 ]
 
 [project.scripts]
-agent-substrate-mcp = "agent_substrate_mcp.server:main"
-agent-substrate-auth = "agent_substrate_mcp.auth:main"
+repo-context-mcp = "repo_context_mcp.server:main"
+repo-context-auth = "repo_context_mcp.auth:main"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

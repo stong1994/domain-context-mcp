@@ -566,7 +566,11 @@ def _domain_directory_slug(
     tags: list[str],
     allow_llm: bool = True,
 ) -> tuple[str, str]:
-    mode = os.environ.get("AGENT_SUBSTRATE_DOMAIN_NAMING", "auto")
+    mode = (
+        os.environ.get("REPO_CONTEXT_DOMAIN_NAMING")
+        or os.environ.get("AGENT_SUBSTRATE_DOMAIN_NAMING")
+        or "auto"
+    )
     if mode not in {"auto", "llm", "deterministic"}:
         mode = "auto"
     if not allow_llm:

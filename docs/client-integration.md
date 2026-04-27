@@ -7,7 +7,7 @@ tools, and runs the full lifecycle.
 ## Verified Server Command
 
 ```text
-/Users/stong/Project/Github/agent-substrate-mcp/.venv/bin/agent-substrate-mcp
+/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp
 ```
 
 ## Suggested MCP Config
@@ -15,10 +15,10 @@ tools, and runs the full lifecycle.
 ```json
 {
   "mcpServers": {
-    "agent-substrate": {
-      "command": "/Users/stong/Project/Github/agent-substrate-mcp/.venv/bin/agent-substrate-mcp",
+    "repo-context": {
+      "command": "/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp",
       "env": {
-        "AGENT_SUBSTRATE_HOME": "/Users/stong/.agent-substrate-mcp"
+        "REPO_CONTEXT_HOME": "~/.repo-context-mcp"
       }
     }
   }
@@ -27,27 +27,21 @@ tools, and runs the full lifecycle.
 
 ## Codex Status
 
-This machine has been configured in:
+Configure Codex with a stdio MCP server named `repo-context` that runs:
 
 ```text
-/Users/stong/.codex/config.toml
+/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp
 ```
 
-The previous config was backed up to:
-
-```text
-/Users/stong/.codex/config.toml.agent-substrate.bak
-```
-
-Verified with:
+Verify with:
 
 ```bash
-/Applications/Codex.app/Contents/Resources/codex mcp list
-/Applications/Codex.app/Contents/Resources/codex mcp get agent-substrate
+codex mcp list
+codex mcp get repo-context
 ```
 
-Codex reports `agent-substrate` as enabled over stdio. Existing conversations
-may need a new session or app restart before newly configured MCP tools appear.
+Existing conversations may need a new session or app restart before newly
+configured MCP tools appear.
 
 ## Claude Code Status
 
@@ -88,7 +82,7 @@ Temporary ledger:
 Persistent local ledger:
 
 ```bash
-.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.agent-substrate-mcp
+.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.repo-context-mcp
 ```
 
 ## Current Tools
