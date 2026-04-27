@@ -17,12 +17,19 @@ execution, and learning durable and reviewable.
 ## Trigger Model
 
 MCP tools do not wake themselves up. The client or model calls them. This server
-is shaped around two trigger classes:
+should be triggered only when a task involves durable domain knowledge:
 
-- Soft triggers: cheap lookup tools the model can call when it needs context.
-- Hard gates: lifecycle tools that should be required by client policy.
+- finding or applying repo/domain conventions
+- resolving which domain owns a reusable learning
+- proposing, reviewing, merging, or renaming domain knowledge
+- using previous task/domain context to guide current work
+- updating repo profiles, workflow rules, or knowledge lifecycle docs
 
-Recommended lifecycle:
+Do not trigger Repo Context MCP for ordinary one-off code edits, simple
+debugging, formatting, local test runs, git operations, or general project
+exploration unless the user explicitly asks for durable knowledge handling.
+
+Recommended lifecycle when domain knowledge is involved:
 
 ```text
 work_begin
@@ -215,8 +222,8 @@ claude mcp add --transport stdio --scope local \
 
 ## Codex Trigger Skill
 
-Codex needs a thin trigger skill or project instruction that nudges repo work
-into the Repo Context MCP workflow:
+Codex needs a thin trigger skill or project instruction that nudges only
+domain-knowledge work into the Repo Context MCP workflow:
 
 ```text
 ~/.codex/skills/repo-context-workflow/SKILL.md
@@ -225,7 +232,7 @@ into the Repo Context MCP workflow:
 Its description is intentionally short to reduce skills context pressure:
 
 ```text
-Use when starting any repo/project/code task, including analysis, code changes, reviews, debugging, validation, tests, or project improvement; call Repo Context MCP work_begin first, work_checkpoint for checks/learnings, and work_finish before final response.
+Use only when a task involves durable domain knowledge: finding/applying repo conventions, resolving domain ownership, proposing or reviewing reusable learnings, or updating knowledge lifecycle docs; call Repo Context MCP work_begin before using domain context and work_finish before final response.
 ```
 
 Important: this README is documentation only. Codex does not read this project
@@ -235,15 +242,16 @@ README at startup to decide which tools to use. Startup behavior comes from:
 - skill metadata such as `~/.codex/skills/repo-context-workflow/SKILL.md`
 - any installed plugin skills, such as Superpowers
 
-The trigger skill is what tells Codex to prefer the Repo Context workflow.
+The trigger skill is what tells Codex when to use the Repo Context workflow.
 The MCP config only makes the tools available.
 
 Expected behavior:
 
-- Repo/project analysis starts with `work_begin`.
-- Checks and durable learning candidates go through `work_checkpoint`.
+- Ordinary repo/code work proceeds without this MCP.
+- Domain-knowledge work starts with `work_begin`.
+- Durable learning candidates go through `work_checkpoint`.
 - Accepted/rejected learning goes through `learning_review`.
-- Final answers are gated by `work_finish`.
+- Final answers for domain-knowledge work are gated by `work_finish`.
 
 To verify a task used the MCP, look for tool calls such as:
 

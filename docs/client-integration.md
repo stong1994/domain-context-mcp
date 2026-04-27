@@ -54,7 +54,7 @@ docs/claude-code.md
 ```
 
 `.mcp.json` registers this server as `repo-context`. `CLAUDE.md` provides the
-workflow trigger policy for Claude Code.
+domain-knowledge trigger policy for Claude Code.
 
 Claude Code was not installed in this environment when this document was
 updated, so direct `claude mcp list` verification could not be run here. After
@@ -121,12 +121,16 @@ Persistent local ledger:
 
 ## Lifecycle Contract
 
-Preferred workflow contract:
+Preferred workflow contract when durable domain knowledge is involved:
 
-- Call `work_begin` before substantive repo work.
-- Call `work_checkpoint` when you have progress, checks, or learning candidates.
+- Call `work_begin` before using domain context.
+- Call `work_checkpoint` when you have reusable learning candidates.
 - Call `learning_review` to accept/reject proposed learning.
-- Call `work_finish` before declaring the task done.
+- Call `work_finish` before declaring domain-knowledge work done.
+
+Do not trigger Repo Context MCP for ordinary one-off code edits, simple
+debugging, formatting, local test runs, git operations, or general project
+exploration unless the user explicitly asks for durable knowledge handling.
 
 Lower-level tools can still be used as lifecycle gates when a client needs
 manual control:
@@ -136,4 +140,4 @@ manual control:
 - Use `execution_run_check` for named validation checks.
 - Use `knowledge_propose_update` for durable domain learning candidates.
 - Use `knowledge_decide_update` before knowledge changes `SKILL.md`.
-- Call `task_complete` before declaring the task done.
+- Call `task_complete` before declaring lower-level domain-knowledge work done.

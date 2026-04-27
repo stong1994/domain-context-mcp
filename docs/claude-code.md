@@ -62,14 +62,15 @@ Inside an interactive Claude Code session:
 ## Trigger Instructions
 
 Claude Code reads `CLAUDE.md` as project guidance. This repo's `CLAUDE.md`
-instructs Claude to use the workflow tools:
+instructs Claude to use the workflow tools only when durable domain knowledge is
+involved:
 
 ```text
 work_begin -> work_checkpoint -> learning_review -> work_finish
 ```
 
 MCP config only makes tools available. `CLAUDE.md` is the trigger policy that
-nudges Claude Code to call them during repo work.
+nudges Claude Code to call them during domain-knowledge work.
 
 ## Secret Handling
 

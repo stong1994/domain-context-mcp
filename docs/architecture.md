@@ -25,12 +25,17 @@ The model owns:
 
 ## Hard Gates
 
-Client policy should call these tools at specific lifecycle points:
+Client policy should call these tools only when durable domain knowledge is
+involved:
 
-- `work_begin` when a user request turns into repo work
-- `work_checkpoint` while work is in progress, especially when checks or learning candidates appear
+- `work_begin` before using domain context
+- `work_checkpoint` while work is in progress, especially when learning candidates appear
 - `learning_review` before durable domain knowledge changes
-- `work_finish` before the model claims the task is done
+- `work_finish` before the model claims domain-knowledge work is done
+
+Ordinary one-off code edits, simple debugging, formatting, local test runs, git
+operations, and general project exploration should proceed without this MCP
+unless the user explicitly asks for durable knowledge handling.
 
 The lower-level tools remain available for precise control:
 

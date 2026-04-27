@@ -155,12 +155,16 @@ Pass this environment variable if you want an explicit state directory:
 REPO_CONTEXT_HOME=~/.repo-context-mcp
 ```
 
-Codex also needs a small trigger skill or project instruction that tells it when
-to call the workflow tools:
+Codex also needs a small trigger skill or project instruction that tells it to
+call the workflow tools only when durable domain knowledge is involved:
 
 ```text
 work_begin -> work_checkpoint -> learning_review -> work_finish
 ```
+
+Do not trigger Repo Context MCP for ordinary one-off code edits, local test runs,
+simple debugging, git operations, or general project exploration unless the user
+explicitly asks for durable knowledge handling.
 
 ## Verify
 
