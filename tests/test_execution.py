@@ -3,15 +3,15 @@ import sys
 
 import pytest
 
-from repo_context_mcp.execution import run_check
-from repo_context_mcp.store import JsonStore
-from repo_context_mcp.tasks import begin_task, complete_task
+from domain_context_mcp.execution import run_check
+from domain_context_mcp.store import JsonStore
+from domain_context_mcp.tasks import begin_task, complete_task
 
 
 def test_run_check_records_named_profile_check(tmp_path):
     store = JsonStore(tmp_path / "state")
     repo = tmp_path / "repo"
-    profile_dir = repo / ".repo-context"
+    profile_dir = repo / ".domain-context"
     profile_dir.mkdir(parents=True)
     profile = {
         "name": "demo",
@@ -37,7 +37,7 @@ def test_run_check_records_named_profile_check(tmp_path):
 def test_run_check_rejects_unknown_check(tmp_path):
     store = JsonStore(tmp_path / "state")
     repo = tmp_path / "repo"
-    profile_dir = repo / ".repo-context"
+    profile_dir = repo / ".domain-context"
     profile_dir.mkdir(parents=True)
     (profile_dir / "profile.json").write_text(
         json.dumps({"name": "demo", "checks": []}),

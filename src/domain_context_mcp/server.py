@@ -37,7 +37,7 @@ from .workflows import (
 )
 from .workspace import discover_repos, workspace_context as build_workspace_context
 
-mcp = FastMCP("repo-context")
+mcp = FastMCP("domain-context")
 STORE = JsonStore.from_env()
 
 

@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "repo-context-mcp"
+name = "domain-context-mcp"
 version = "0.1.0"
-description = "A local MCP substrate for repo context, execution ledgers, and reviewed knowledge updates."
+description = "A local MCP substrate for domain context, execution ledgers, and reviewed knowledge updates."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -19,8 +19,8 @@ dev = [
 ]
 
 [project.scripts]
-repo-context-mcp = "repo_context_mcp.server:main"
-repo-context-auth = "repo_context_mcp.auth:main"
+domain-context-mcp = "domain_context_mcp.server:main"
+domain-context-auth = "domain_context_mcp.auth:main"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

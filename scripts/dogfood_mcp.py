@@ -14,11 +14,11 @@ from mcp.client.stdio import StdioServerParameters, stdio_client
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SERVER_COMMAND = PROJECT_ROOT / ".venv" / "bin" / "repo-context-mcp"
+SERVER_COMMAND = PROJECT_ROOT / ".venv" / "bin" / "domain-context-mcp"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Dogfood the Repo Context MCP server over stdio.")
+    parser = argparse.ArgumentParser(description="Dogfood the Domain Context MCP server over stdio.")
     parser.add_argument(
         "--state-dir",
         type=Path,
@@ -50,7 +50,7 @@ async def call(session: ClientSession, name: str, arguments: dict[str, Any]) -> 
 
 async def run_dogfood(state_dir: Path, repo_path: Path) -> dict[str, Any]:
     env = dict(os.environ)
-    env["REPO_CONTEXT_HOME"] = str(state_dir)
+    env["DOMAIN_CONTEXT_HOME"] = str(state_dir)
 
     params = StdioServerParameters(
         command=str(SERVER_COMMAND),
@@ -70,7 +70,7 @@ async def run_dogfood(state_dir: Path, repo_path: Path) -> dict[str, Any]:
                     "name": "Python MCP Server",
                     "description": "working on local Python MCP servers, stdio transports, tool schemas, task ledgers, and domain knowledge lifecycle flows",
                     "repos": [str(repo_path)],
-                    "tags": ["python", "mcp", "repo-context"],
+                    "tags": ["python", "mcp", "domain-context"],
                 },
             )
             domain_id = domain["domain"]["id"]
@@ -140,7 +140,7 @@ async def run_dogfood(state_dir: Path, repo_path: Path) -> dict[str, Any]:
             )
 
             return {
-                "server": "repo-context",
+                "server": "domain-context",
                 "tool_count": len(tool_names),
                 "tools": tool_names,
                 "state_dir": str(state_dir),
@@ -167,7 +167,7 @@ async def main_async() -> int:
         return 1
 
     if args.state_dir is None:
-        with tempfile.TemporaryDirectory(prefix="repo-context-dogfood-") as tmp:
+        with tempfile.TemporaryDirectory(prefix="domain-context-dogfood-") as tmp:
             summary = await run_dogfood(Path(tmp), args.repo_path.resolve())
             print(json.dumps(summary, ensure_ascii=False, indent=2))
             return 0

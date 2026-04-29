@@ -1,9 +1,9 @@
 import json
 import sys
 
-from repo_context_mcp.domains import create_domain, read_domain
-from repo_context_mcp.store import JsonStore
-from repo_context_mcp.workflows import (
+from domain_context_mcp.domains import create_domain, read_domain
+from domain_context_mcp.store import JsonStore
+from domain_context_mcp.workflows import (
     learning_review,
     work_begin,
     work_checkpoint,
@@ -12,7 +12,7 @@ from repo_context_mcp.workflows import (
 
 
 def write_profile(repo, checks=None):
-    profile_dir = repo / ".repo-context"
+    profile_dir = repo / ".domain-context"
     profile_dir.mkdir(parents=True)
     profile = {
         "name": "demo",

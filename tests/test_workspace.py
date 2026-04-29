@@ -1,11 +1,11 @@
 import json
 
-from repo_context_mcp.workspace import read_profile, workspace_context
+from domain_context_mcp.workspace import read_profile, workspace_context
 
 
 def test_explicit_profile_is_used(tmp_path):
     repo = tmp_path / "repo"
-    profile_dir = repo / ".repo-context"
+    profile_dir = repo / ".domain-context"
     profile_dir.mkdir(parents=True)
     profile = {
         "name": "demo",
@@ -19,7 +19,7 @@ def test_explicit_profile_is_used(tmp_path):
 
     assert loaded["name"] == "demo"
     assert loaded["checks"][0]["id"] == "tests"
-    assert loaded["source"].endswith(".repo-context/profile.json")
+    assert loaded["source"].endswith(".domain-context/profile.json")
 
 
 def test_legacy_profile_path_is_still_read(tmp_path):

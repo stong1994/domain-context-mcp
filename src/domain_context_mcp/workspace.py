@@ -58,8 +58,11 @@ def git_status(repo_path: str | None = None) -> dict[str, Any]:
 
 def read_profile(repo_path: str | None = None) -> dict[str, Any]:
     repo = resolve_repo(repo_path)
-    explicit = repo / ".repo-context" / "profile.json"
+    explicit = repo / ".domain-context" / "profile.json"
+    previous = repo / ".repo-context" / "profile.json"
     legacy = repo / ".agent-substrate" / "profile.json"
+    if not explicit.exists() and previous.exists():
+        explicit = previous
     if not explicit.exists() and legacy.exists():
         explicit = legacy
     if explicit.exists():
@@ -108,7 +111,7 @@ def infer_profile(repo: Path) -> dict[str, Any]:
         checks.append({"id": "cargo-test", "label": "Rust tests", "command": ["cargo", "test"]})
 
     if not checks:
-        conventions.append("No validation checks inferred. Add .repo-context/profile.json to make checks explicit.")
+        conventions.append("No validation checks inferred. Add .domain-context/profile.json to make checks explicit.")
 
     return {
         "name": repo.name,

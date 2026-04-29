@@ -26,9 +26,10 @@ class JsonStore:
     @classmethod
     def from_env(cls) -> "JsonStore":
         root = (
-            os.environ.get("REPO_CONTEXT_HOME")
+            os.environ.get("DOMAIN_CONTEXT_HOME")
+            or os.environ.get("REPO_CONTEXT_HOME")
             or os.environ.get("AGENT_SUBSTRATE_HOME")
-            or "~/.repo-context-mcp"
+            or "~/.domain-context-mcp"
         )
         return cls(Path(root).expanduser())
 

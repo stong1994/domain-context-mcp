@@ -1,9 +1,9 @@
 {
   "mcpServers": {
-    "repo-context": {
-      "command": "repo-context-mcp",
+    "domain-context": {
+      "command": "domain-context-mcp",
       "env": {
-        "REPO_CONTEXT_HOME": "~/.repo-context-mcp"
+        "DOMAIN_CONTEXT_HOME": "~/.domain-context-mcp"
       }
     }
   }

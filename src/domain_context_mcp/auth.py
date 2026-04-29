@@ -30,7 +30,8 @@ def read_saved_api_key() -> str | None:
 
 def resolve_openai_api_key() -> str | None:
     return (
-        os.environ.get("REPO_CONTEXT_OPENAI_API_KEY")
+        os.environ.get("DOMAIN_CONTEXT_OPENAI_API_KEY")
+        or os.environ.get("REPO_CONTEXT_OPENAI_API_KEY")
         or os.environ.get("AGENT_SUBSTRATE_OPENAI_API_KEY")
         or os.environ.get("OPENAI_API_KEY")
         or read_saved_api_key()
@@ -76,7 +77,9 @@ def logout() -> bool:
 def status() -> dict[str, Any]:
     path = auth_path()
     env_source = None
-    if os.environ.get("REPO_CONTEXT_OPENAI_API_KEY"):
+    if os.environ.get("DOMAIN_CONTEXT_OPENAI_API_KEY"):
+        env_source = "DOMAIN_CONTEXT_OPENAI_API_KEY"
+    elif os.environ.get("REPO_CONTEXT_OPENAI_API_KEY"):
         env_source = "REPO_CONTEXT_OPENAI_API_KEY"
     elif os.environ.get("AGENT_SUBSTRATE_OPENAI_API_KEY"):
         env_source = "AGENT_SUBSTRATE_OPENAI_API_KEY"
@@ -91,7 +94,7 @@ def status() -> dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="repo-context-auth")
+    parser = argparse.ArgumentParser(prog="domain-context-auth")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     login_parser = subparsers.add_parser("login", help="Store OpenAI API credentials")

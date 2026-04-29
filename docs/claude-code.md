@@ -10,14 +10,14 @@ This repo includes a project-scoped Claude Code MCP config:
 .mcp.json
 ```
 
-It registers the server as `repo-context`:
+It registers the server as `domain-context`:
 
 ```json
 {
   "mcpServers": {
-    "repo-context": {
+    "domain-context": {
       "type": "stdio",
-      "command": "${REPO_CONTEXT_MCP_COMMAND:-repo-context-mcp}"
+      "command": "${DOMAIN_CONTEXT_MCP_COMMAND:-domain-context-mcp}"
     }
   }
 }
@@ -27,8 +27,8 @@ Claude Code supports environment expansion in `.mcp.json`, so users can override
 machine-specific paths without editing the file:
 
 ```bash
-export REPO_CONTEXT_MCP_COMMAND=/path/to/repo/.venv/bin/repo-context-mcp
-export REPO_CONTEXT_HOME="$HOME/.repo-context-mcp"
+export DOMAIN_CONTEXT_MCP_COMMAND=/path/to/repo/.venv/bin/domain-context-mcp
+export DOMAIN_CONTEXT_HOME="$HOME/.domain-context-mcp"
 ```
 
 When Claude Code opens this project, it should prompt before trusting the
@@ -42,15 +42,15 @@ root after installing the package:
 
 ```bash
 claude mcp add --transport stdio --scope local \
-  --env REPO_CONTEXT_HOME="$HOME/.repo-context-mcp" \
-  repo-context -- "$(pwd)/.venv/bin/repo-context-mcp"
+  --env DOMAIN_CONTEXT_HOME="$HOME/.domain-context-mcp" \
+  domain-context -- "$(pwd)/.venv/bin/domain-context-mcp"
 ```
 
 Use these commands to verify:
 
 ```bash
 claude mcp list
-claude mcp get repo-context
+claude mcp get domain-context
 ```
 
 Inside an interactive Claude Code session:
@@ -78,13 +78,13 @@ Do not put OpenAI or Anthropic API keys into `.mcp.json`. Configure OpenAI acces
 through one of these local-only mechanisms:
 
 ```text
-REPO_CONTEXT_OPENAI_API_KEY
+DOMAIN_CONTEXT_OPENAI_API_KEY
 OPENAI_API_KEY
-~/.repo-context-mcp/auth.json
+~/.domain-context-mcp/auth.json
 ```
 
 The saved auth file can be created with:
 
 ```bash
-printenv OPENAI_API_KEY | .venv/bin/repo-context-auth login --with-api-key
+printenv OPENAI_API_KEY | .venv/bin/domain-context-auth login --with-api-key
 ```

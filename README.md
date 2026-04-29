@@ -1,6 +1,6 @@
-# Repo Context MCP
+# Domain Context MCP
 
-Repo Context MCP is a local tool server for coding agents. It is deliberately
+Domain Context MCP is a local tool server for coding agents. It is deliberately
 not a CLI agent and does not try to orchestrate a conversation. Codex, Claude, or
 another MCP client remains the driver; this server provides the local operating
 layer:
@@ -25,7 +25,7 @@ should be triggered only when a task involves durable domain knowledge:
 - using previous task/domain context to guide current work
 - updating repo profiles, workflow rules, or knowledge lifecycle docs
 
-Do not trigger Repo Context MCP for ordinary one-off code edits, simple
+Do not trigger Domain Context MCP for ordinary one-off code edits, simple
 debugging, formatting, local test runs, git operations, or general project
 exploration unless the user explicitly asks for durable knowledge handling.
 
@@ -85,20 +85,20 @@ It also exposes lower-level tools for precise control:
 By default, ledgers live in:
 
 ```text
-~/.repo-context-mcp/
+~/.domain-context-mcp/
 ```
 
 Override it with:
 
 ```text
-REPO_CONTEXT_HOME=/path/to/state
+DOMAIN_CONTEXT_HOME=/path/to/state
 ```
 
 Tasks, executions, and update ledgers are stored as small JSON collections.
 Domain knowledge is stored under:
 
 ```text
-~/.repo-context-mcp/domains/<readable-domain-name>/
+~/.domain-context-mcp/domains/<readable-domain-name>/
   SKILL.md
   domain.json
 ```
@@ -130,7 +130,7 @@ Run tests:
 Run the MCP server over stdio:
 
 ```bash
-.venv/bin/repo-context-mcp
+.venv/bin/domain-context-mcp
 ```
 
 ## OpenAI API
@@ -139,27 +139,29 @@ Run the MCP server over stdio:
 when an API key is configured. The key lookup order is:
 
 ```text
+DOMAIN_CONTEXT_OPENAI_API_KEY
 REPO_CONTEXT_OPENAI_API_KEY
+AGENT_SUBSTRATE_OPENAI_API_KEY
 OPENAI_API_KEY
-~/.repo-context-mcp/auth.json
+~/.domain-context-mcp/auth.json
 ```
 
 Store a key once with:
 
 ```bash
-printenv OPENAI_API_KEY | .venv/bin/repo-context-auth login --with-api-key
+printenv OPENAI_API_KEY | .venv/bin/domain-context-auth login --with-api-key
 ```
 
 Check status without revealing the secret:
 
 ```bash
-.venv/bin/repo-context-auth status
+.venv/bin/domain-context-auth status
 ```
 
 Remove saved credentials:
 
 ```bash
-.venv/bin/repo-context-auth logout
+.venv/bin/domain-context-auth logout
 ```
 
 The saved auth file is written with `0600` permissions. The default model is:
@@ -171,8 +173,8 @@ gpt-5.2-codex
 Override it with:
 
 ```text
-REPO_CONTEXT_MODEL=<model>
-REPO_CONTEXT_REASONING=medium
+DOMAIN_CONTEXT_MODEL=<model>
+DOMAIN_CONTEXT_REASONING=medium
 ```
 
 If no API key is configured, domain resolution falls back to deterministic repo
@@ -185,10 +187,10 @@ Example client config:
 ```json
 {
   "mcpServers": {
-    "repo-context": {
-      "command": "/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp",
+    "domain-context": {
+      "command": "/absolute/path/to/domain-context-mcp/.venv/bin/domain-context-mcp",
       "env": {
-        "REPO_CONTEXT_HOME": "~/.repo-context-mcp"
+        "DOMAIN_CONTEXT_HOME": "~/.domain-context-mcp"
       }
     }
   }
@@ -200,7 +202,7 @@ Example client config:
 Claude Code support is provided through:
 
 - `.mcp.json`: project-scoped MCP config that registers this server as
-  `repo-context`
+  `domain-context`
 - `CLAUDE.md`: project instructions that tell Claude Code when to call the
   workflow tools
 - `docs/claude-code.md`: setup, verification, and secret-handling notes
@@ -216,33 +218,33 @@ Or configure it as a local, non-versioned Claude Code server:
 
 ```bash
 claude mcp add --transport stdio --scope local \
-  --env REPO_CONTEXT_HOME="$HOME/.repo-context-mcp" \
-  repo-context -- "$(pwd)/.venv/bin/repo-context-mcp"
+  --env DOMAIN_CONTEXT_HOME="$HOME/.domain-context-mcp" \
+  domain-context -- "$(pwd)/.venv/bin/domain-context-mcp"
 ```
 
 ## Codex Trigger Skill
 
 Codex needs a thin trigger skill or project instruction that nudges only
-domain-knowledge work into the Repo Context MCP workflow:
+domain-knowledge work into the Domain Context MCP workflow:
 
 ```text
-~/.codex/skills/repo-context-workflow/SKILL.md
+~/.codex/skills/domain-context-workflow/SKILL.md
 ```
 
 Its description is intentionally short to reduce skills context pressure:
 
 ```text
-Use only when a task involves durable domain knowledge: finding/applying repo conventions, resolving domain ownership, proposing or reviewing reusable learnings, or updating knowledge lifecycle docs; call Repo Context MCP work_begin before using domain context and work_finish before final response.
+Use only when a task involves durable domain knowledge: finding/applying repo conventions, resolving domain ownership, proposing or reviewing reusable learnings, or updating knowledge lifecycle docs; call Domain Context MCP work_begin before using domain context and work_finish before final response.
 ```
 
 Important: this README is documentation only. Codex does not read this project
 README at startup to decide which tools to use. Startup behavior comes from:
 
 - MCP server config in the Codex config file
-- skill metadata such as `~/.codex/skills/repo-context-workflow/SKILL.md`
+- skill metadata such as `~/.codex/skills/domain-context-workflow/SKILL.md`
 - any installed plugin skills, such as Superpowers
 
-The trigger skill is what tells Codex when to use the Repo Context workflow.
+The trigger skill is what tells Codex when to use the Domain Context workflow.
 The MCP config only makes the tools available.
 
 Expected behavior:
@@ -265,7 +267,7 @@ work_finish
 Or inspect the local ledger:
 
 ```bash
-ls -lt ~/.repo-context-mcp
+ls -lt ~/.domain-context-mcp
 ```
 
 ## Dogfood
@@ -280,7 +282,7 @@ By default, dogfood uses a temporary ledger directory. To write into the normal
 local ledger:
 
 ```bash
-.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.repo-context-mcp
+.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.domain-context-mcp
 ```
 
 The dogfood flow calls:
@@ -302,7 +304,7 @@ The server can infer basic repo profiles from files like `package.json`,
 For stronger control, add:
 
 ```text
-.repo-context/profile.json
+.domain-context/profile.json
 ```
 
 Example:

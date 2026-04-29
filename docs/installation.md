@@ -1,7 +1,7 @@
 # Installation
 
-Repo Context MCP is a local stdio MCP server for coding agents. Install it into
-a Python virtual environment, then point your MCP client at the `repo-context-mcp`
+Domain Context MCP is a local stdio MCP server for coding agents. Install it into
+a Python virtual environment, then point your MCP client at the `domain-context-mcp`
 command.
 
 ## Requirements
@@ -18,8 +18,8 @@ repo and text matching.
 Clone the repository:
 
 ```bash
-git clone https://github.com/stong1994/repo-context-mcp.git
-cd repo-context-mcp
+git clone https://github.com/stong1994/domain-context-mcp.git
+cd domain-context-mcp
 ```
 
 Create a virtual environment and install the package:
@@ -33,14 +33,14 @@ python3 -m venv .venv
 Verify the command is available:
 
 ```bash
-.venv/bin/repo-context-mcp --help
+.venv/bin/domain-context-mcp --help
 ```
 
 For MCP clients that do not inherit your shell `PATH`, use the absolute path to
 the virtualenv command:
 
 ```bash
-$(pwd)/.venv/bin/repo-context-mcp
+$(pwd)/.venv/bin/domain-context-mcp
 ```
 
 ## State Directory
@@ -48,17 +48,17 @@ $(pwd)/.venv/bin/repo-context-mcp
 By default, local ledgers are stored under:
 
 ```text
-~/.repo-context-mcp
+~/.domain-context-mcp
 ```
 
 Override this per client or shell:
 
 ```bash
-export REPO_CONTEXT_HOME="$HOME/.repo-context-mcp"
+export DOMAIN_CONTEXT_HOME="$HOME/.domain-context-mcp"
 ```
 
-Older `AGENT_SUBSTRATE_HOME` values are still honored as a migration fallback,
-but new installs should use `REPO_CONTEXT_HOME`.
+Older `REPO_CONTEXT_HOME` and `AGENT_SUBSTRATE_HOME` values are still honored as
+migration fallbacks, but new installs should use `DOMAIN_CONTEXT_HOME`.
 
 ## OpenAI Credentials
 
@@ -68,23 +68,23 @@ domain directory naming.
 Preferred environment variable:
 
 ```bash
-export REPO_CONTEXT_OPENAI_API_KEY="sk-..."
+export DOMAIN_CONTEXT_OPENAI_API_KEY="sk-..."
 ```
 
 Or save the key locally:
 
 ```bash
-printenv OPENAI_API_KEY | .venv/bin/repo-context-auth login --with-api-key
-.venv/bin/repo-context-auth status
+printenv OPENAI_API_KEY | .venv/bin/domain-context-auth login --with-api-key
+.venv/bin/domain-context-auth status
 ```
 
 The saved credential file is written to:
 
 ```text
-~/.repo-context-mcp/auth.json
+~/.domain-context-mcp/auth.json
 ```
 
-with `0600` permissions. Older `AGENT_SUBSTRATE_OPENAI_API_KEY` and model
+with `0600` permissions. Older `REPO_CONTEXT_*` and `AGENT_SUBSTRATE_*`
 environment variables are still accepted as migration fallbacks.
 
 ## Generic MCP Config
@@ -94,17 +94,17 @@ Use this config shape for clients that accept JSON MCP server definitions:
 ```json
 {
   "mcpServers": {
-    "repo-context": {
-      "command": "/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp",
+    "domain-context": {
+      "command": "/absolute/path/to/domain-context-mcp/.venv/bin/domain-context-mcp",
       "env": {
-        "REPO_CONTEXT_HOME": "~/.repo-context-mcp"
+        "DOMAIN_CONTEXT_HOME": "~/.domain-context-mcp"
       }
     }
   }
 }
 ```
 
-If the command is already on the client's `PATH`, `repo-context-mcp` is enough.
+If the command is already on the client's `PATH`, `domain-context-mcp` is enough.
 
 ## Claude Code
 
@@ -113,18 +113,18 @@ This repo includes a project-scoped `.mcp.json`:
 ```json
 {
   "mcpServers": {
-    "repo-context": {
+    "domain-context": {
       "type": "stdio",
-      "command": "${REPO_CONTEXT_MCP_COMMAND:-repo-context-mcp}"
+      "command": "${DOMAIN_CONTEXT_MCP_COMMAND:-domain-context-mcp}"
     }
   }
 }
 ```
 
-If your Claude Code process cannot find `repo-context-mcp`, set:
+If your Claude Code process cannot find `domain-context-mcp`, set:
 
 ```bash
-export REPO_CONTEXT_MCP_COMMAND="$(pwd)/.venv/bin/repo-context-mcp"
+export DOMAIN_CONTEXT_MCP_COMMAND="$(pwd)/.venv/bin/domain-context-mcp"
 ```
 
 Then open the project in Claude Code, approve the project MCP server, and verify:
@@ -137,22 +137,22 @@ Local-only alternative:
 
 ```bash
 claude mcp add --transport stdio --scope local \
-  --env REPO_CONTEXT_HOME="$HOME/.repo-context-mcp" \
-  repo-context -- "$(pwd)/.venv/bin/repo-context-mcp"
+  --env DOMAIN_CONTEXT_HOME="$HOME/.domain-context-mcp" \
+  domain-context -- "$(pwd)/.venv/bin/domain-context-mcp"
 ```
 
 ## Codex
 
-Add a stdio MCP server named `repo-context` that runs:
+Add a stdio MCP server named `domain-context` that runs:
 
 ```text
-/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp
+/absolute/path/to/domain-context-mcp/.venv/bin/domain-context-mcp
 ```
 
 Pass this environment variable if you want an explicit state directory:
 
 ```text
-REPO_CONTEXT_HOME=~/.repo-context-mcp
+DOMAIN_CONTEXT_HOME=~/.domain-context-mcp
 ```
 
 Codex also needs a small trigger skill or project instruction that tells it to
@@ -162,7 +162,7 @@ call the workflow tools only when durable domain knowledge is involved:
 work_begin -> work_checkpoint -> learning_review -> work_finish
 ```
 
-Do not trigger Repo Context MCP for ordinary one-off code edits, local test runs,
+Do not trigger Domain Context MCP for ordinary one-off code edits, local test runs,
 simple debugging, git operations, or general project exploration unless the user
 explicitly asks for durable knowledge handling.
 
@@ -183,5 +183,5 @@ Run the dogfood MCP client:
 Use the persistent state directory:
 
 ```bash
-.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.repo-context-mcp
+.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.domain-context-mcp
 ```

@@ -567,7 +567,8 @@ def _domain_directory_slug(
     allow_llm: bool = True,
 ) -> tuple[str, str]:
     mode = (
-        os.environ.get("REPO_CONTEXT_DOMAIN_NAMING")
+        os.environ.get("DOMAIN_CONTEXT_DOMAIN_NAMING")
+        or os.environ.get("REPO_CONTEXT_DOMAIN_NAMING")
         or os.environ.get("AGENT_SUBSTRATE_DOMAIN_NAMING")
         or "auto"
     )

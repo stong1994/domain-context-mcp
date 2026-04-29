@@ -1,5 +1,5 @@
-from repo_context_mcp.knowledge import decide_knowledge, propose_knowledge, search_knowledge
-from repo_context_mcp.store import JsonStore
+from domain_context_mcp.knowledge import decide_knowledge, propose_knowledge, search_knowledge
+from domain_context_mcp.store import JsonStore
 
 
 def test_knowledge_requires_acceptance_before_search(tmp_path):

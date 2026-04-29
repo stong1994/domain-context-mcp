@@ -1,4 +1,4 @@
-from repo_context_mcp.domains import (
+from domain_context_mcp.domains import (
     create_domain,
     duplicate_domain_groups,
     link_domain_repo,
@@ -8,8 +8,8 @@ from repo_context_mcp.domains import (
     rename_domain_directory,
     resolve_domains,
 )
-import repo_context_mcp.llm as llm
-from repo_context_mcp.store import JsonStore
+import domain_context_mcp.llm as llm
+from domain_context_mcp.store import JsonStore
 
 
 def test_create_domain_writes_skill_and_metadata(tmp_path):
@@ -53,7 +53,7 @@ def test_create_domain_uses_llm_generated_readable_directory_name(tmp_path, monk
     def fake_generate_domain_directory_name_with_openai(**kwargs):
         return "mcp-tool-lifecycle"
 
-    monkeypatch.setenv("REPO_CONTEXT_DOMAIN_NAMING", "llm")
+    monkeypatch.setenv("DOMAIN_CONTEXT_DOMAIN_NAMING", "llm")
     monkeypatch.setattr(llm, "generate_domain_directory_name_with_openai", fake_generate_domain_directory_name_with_openai)
 
     created = create_domain(store, "Python MCP Server", "Working on Python MCP servers.")

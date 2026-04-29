@@ -7,7 +7,7 @@ tools, and runs the full lifecycle.
 ## Verified Server Command
 
 ```text
-/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp
+/absolute/path/to/domain-context-mcp/.venv/bin/domain-context-mcp
 ```
 
 ## Suggested MCP Config
@@ -15,10 +15,10 @@ tools, and runs the full lifecycle.
 ```json
 {
   "mcpServers": {
-    "repo-context": {
-      "command": "/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp",
+    "domain-context": {
+      "command": "/absolute/path/to/domain-context-mcp/.venv/bin/domain-context-mcp",
       "env": {
-        "REPO_CONTEXT_HOME": "~/.repo-context-mcp"
+        "DOMAIN_CONTEXT_HOME": "~/.domain-context-mcp"
       }
     }
   }
@@ -27,17 +27,17 @@ tools, and runs the full lifecycle.
 
 ## Codex Status
 
-Configure Codex with a stdio MCP server named `repo-context` that runs:
+Configure Codex with a stdio MCP server named `domain-context` that runs:
 
 ```text
-/absolute/path/to/repo-context-mcp/.venv/bin/repo-context-mcp
+/absolute/path/to/domain-context-mcp/.venv/bin/domain-context-mcp
 ```
 
 Verify with:
 
 ```bash
 codex mcp list
-codex mcp get repo-context
+codex mcp get domain-context
 ```
 
 Existing conversations may need a new session or app restart before newly
@@ -53,7 +53,7 @@ CLAUDE.md
 docs/claude-code.md
 ```
 
-`.mcp.json` registers this server as `repo-context`. `CLAUDE.md` provides the
+`.mcp.json` registers this server as `domain-context`. `CLAUDE.md` provides the
 domain-knowledge trigger policy for Claude Code.
 
 Claude Code was not installed in this environment when this document was
@@ -62,7 +62,7 @@ installing Claude Code, verify with:
 
 ```bash
 claude mcp list
-claude mcp get repo-context
+claude mcp get domain-context
 ```
 
 Inside Claude Code, use:
@@ -82,7 +82,7 @@ Temporary ledger:
 Persistent local ledger:
 
 ```bash
-.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.repo-context-mcp
+.venv/bin/python scripts/dogfood_mcp.py --state-dir ~/.domain-context-mcp
 ```
 
 ## Current Tools
@@ -128,7 +128,7 @@ Preferred workflow contract when durable domain knowledge is involved:
 - Call `learning_review` to accept/reject proposed learning.
 - Call `work_finish` before declaring domain-knowledge work done.
 
-Do not trigger Repo Context MCP for ordinary one-off code edits, simple
+Do not trigger Domain Context MCP for ordinary one-off code edits, simple
 debugging, formatting, local test runs, git operations, or general project
 exploration unless the user explicitly asks for durable knowledge handling.
 

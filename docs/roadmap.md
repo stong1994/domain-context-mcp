@@ -4,7 +4,7 @@
 
 ### Lightweight Workspace Boundary
 
-Repo Context MCP currently has repo/workspace context, but not a first-class
+Domain Context MCP currently has repo/workspace context, but not a first-class
 workspace entity. That is acceptable for the current scope because durable
 domain knowledge is the priority.
 
